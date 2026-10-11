@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
@@ -69,13 +70,15 @@ class MainActivity : Activity() {
             )
         }
 
-        input.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEND || actionId == EditorInfo.IME_NULL) {
-                send(input.text.toString() + "\r")
-                input.setText("")
+        input.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEND ||
+                (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)
+            ) {
+                sendLine()
                 true
             } else false
         }
+        findViewById<Button>(R.id.send).setOnClickListener { sendLine() }
 
         // 辅助按键：标签 -> 发送序列；Tab 会先带上已输入的文字以触发远端补全
         val keys = findViewById<LinearLayout>(R.id.keys)
@@ -160,10 +163,16 @@ class MainActivity : Activity() {
         screenBuf.setLength(0)
         esc = Esc.NONE
         cr = false
+        screenBuf.append("[已连接]\n")
         render()
         form.visibility = View.GONE
         term.visibility = View.VISIBLE
         input.requestFocus()
+    }
+
+    private fun sendLine() {
+        send(input.text.toString() + "\r")
+        input.setText("")
     }
 
     private fun send(s: String) {

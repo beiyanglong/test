@@ -43,8 +43,14 @@
             <LinearLayout android:id="@+id/keys" android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:orientation="horizontal" />
         </HorizontalScrollView>
-        <EditText android:id="@+id/input" android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:hint="输入命令，回车发送" android:singleLine="true" android:imeOptions="actionSend"
-            android:inputType="textVisiblePassword" android:textColor="#FFFFFF" android:textColorHint="#888888" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <EditText android:id="@+id/input" android:layout_width="0dp" android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:hint="输入命令" android:singleLine="true" android:imeOptions="actionSend"
+                android:inputType="textVisiblePassword" android:textColor="#FFFFFF" android:textColorHint="#888888" />
+            <Button android:id="@+id/send" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="发送" />
+        </LinearLayout>
     </LinearLayout>
 </FrameLayout>
